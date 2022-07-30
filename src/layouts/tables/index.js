@@ -30,10 +30,47 @@ import DataTable from "examples/Tables/DataTable";
 // Data
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
+import musicsTableData from 'layouts/tables/data/musicsTableData'; 
+import AppBar from "@mui/material/AppBar";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Icon from "@mui/material/Icon";
+
+import breakpoints from "assets/theme/base/breakpoints";
+import { useEffect, useState } from "react";
+
 
 function Tables() {
   const { columns, rows } = authorsTableData();
   const { columns: pColumns, rows: pRows } = projectsTableData();
+  const { columns: mColumns, rows: mRows } = musicsTableData();
+
+  const [tabsOrientation, setTabsOrientation] = useState("horizontal");
+  const [tabValue, setTabValue] = useState(0);
+
+  console.log(tabValue);
+
+  useEffect(() => {
+    // A function that sets the orientation state of the tabs.
+    function handleTabsOrientation() {
+      return window.innerWidth < breakpoints.values.sm
+        ? setTabsOrientation("vertical")
+        : setTabsOrientation("horizontal");
+    }
+
+    /** 
+     The event listener that's calling the handleTabsOrientation function when resizing the window.
+    */
+    window.addEventListener("resize", handleTabsOrientation);
+
+    // Call the handleTabsOrientation function to set the state with the initial value.
+    handleTabsOrientation();
+
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleTabsOrientation);
+  }, [tabsOrientation]);
+
+  const handleSetTabValue = (event, newValue) => setTabValue(newValue);
 
   return (
     <DashboardLayout>
@@ -94,6 +131,58 @@ function Tables() {
               </MDBox>
             </Card>
           </Grid>
+
+          <Grid item xs={12} md={6} lg={4} sx={{ ml: "auto" }}>
+            <AppBar position="static">
+              <Tabs orientation={tabsOrientation} value={tabValue} onChange={handleSetTabValue}>
+                <Tab
+                  label="ALL"
+                 
+                />
+                <Tab
+                  label="Lullaby"
+                 
+                />
+                <Tab
+                  label="Prenatal"
+                 
+                />
+                <Tab
+                  label="white_Noise"
+                 
+                />
+              </Tabs>
+            </AppBar>
+          </Grid>
+          
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+              >
+                <MDTypography variant="h6" color="white">
+                  musics Table
+                </MDTypography>
+              </MDBox>
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns: mColumns, rows: mRows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                />
+              </MDBox>
+            </Card>
+          </Grid>
+
         </Grid>
       </MDBox>
       <Footer />

@@ -80,6 +80,9 @@ function DataTable({
     state: { pageIndex, pageSize, globalFilter },
   } = tableInstance;
 
+  
+
+
   // Set the default value for the entries per page when component mounts
   useEffect(() => setPageSize(defaultValue || 10), [defaultValue]);
 
