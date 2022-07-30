@@ -35,8 +35,19 @@ import reportsLineChartData from "layouts/dashboard/data/reportsLineChartData";
 import Projects from "layouts/dashboard/components/Projects";
 import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 
+import { useNavigate } from 'react-router-dom';
+import { useCookies, Cookies } from 'react-cookie';
+
 function Dashboard() {
   const { sales, tasks } = reportsLineChartData;
+
+  const navigate = useNavigate();
+  const cookie = new Cookies();
+  console.log(cookie.get('id'));
+
+  if(cookie.get('id') === undefined){
+    navigate('/authentication/sign-in');
+  }
 
   return (
     <DashboardLayout>

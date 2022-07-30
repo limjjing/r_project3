@@ -41,53 +41,52 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
+import { useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie';
+
 function Basic() {
+  const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
 
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+
+  const [cookies, setCookie, removeCookie] = useCookies(['id']);
+  removeCookie('id', {path: '/'} );
+
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const setIdInput = (e) => {
+    setId(e.target.value);
+  }
+
+  const myId = 'lim';
+  const myPassword = '123';
+
+  const setPasswordInput = (e) => {
+    setPassword(e.target.value);
+  }
+
+  const login = () => {
+    if(id == myId && password == myPassword){
+      alert('로그인 성공');
+      setCookie('id', id, {path: '/'} );
+      navigate('/dashboard')
+    }else {
+      alert('로그인 실패');
+    }
+  }
 
   return (
     <BasicLayout image={bgImage}>
       <Card>
-        <MDBox
-          variant="gradient"
-          bgColor="info"
-          borderRadius="lg"
-          coloredShadow="info"
-          mx={2}
-          mt={-3}
-          p={2}
-          mb={1}
-          textAlign="center"
-        >
-          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
-            Sign in
-          </MDTypography>
-          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <FacebookIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GitHubIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GoogleIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-          </Grid>
-        </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput type="email" label="Email" fullWidth value={id} onChange={setIdInput} />
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput type="password" label="Password" fullWidth value={password} onChange={setPasswordInput} />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -102,7 +101,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton variant="gradient" color="info" fullWidth onClick={login}>
                 sign in
               </MDButton>
             </MDBox>
