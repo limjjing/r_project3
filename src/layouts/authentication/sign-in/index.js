@@ -43,6 +43,8 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
 import { useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie';
+import 'react-notifications/lib/notifications.css';
+import { NotificationContainer, NotificationManager } from "react-notifications";
 
 function Basic() {
   const navigate = useNavigate();
@@ -69,12 +71,38 @@ function Basic() {
 
   const login = () => {
     if(id == myId && password == myPassword){
-      alert('로그인 성공');
+      // alert('로그인 성공');
       setCookie('id', id, {path: '/'} );
+
+      if(myId == "lim"){
+        setCookie('level', '개발자', {path: "/"});
+      }
+
       navigate('/dashboard')
     }else {
-      alert('로그인 실패');
+      // alert('로그인 실패');
+      createNotification('error')
     }
+  }
+
+   const createNotification = (type) => {
+      switch (type) {
+        case 'info':
+          NotificationManager.info('Info message');
+          break;
+        case 'success':
+          NotificationManager.success('Success message', 'Title here');
+          break;
+        case 'warning':
+          NotificationManager.warning('Warning message', 'Close after 3000ms', 3000);
+          break;
+        case 'error':
+          console.log('에러');
+          NotificationManager.error('Error message', 'Click me!', 3000, () => {
+            alert('callback');
+          });
+          break;
+    };
   }
 
   return (
@@ -123,6 +151,7 @@ function Basic() {
           </MDBox>
         </MDBox>
       </Card>
+      <NotificationContainer/>
     </BasicLayout>
   );
 }
